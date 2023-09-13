@@ -18,7 +18,7 @@ function isUnderPoint (point, element) {
     
 }
 
-function addEventListener (element, ...args) {
+function addListeners(element, ...args) {
     element.addEventListener(...args);
     return () => element.removeEventListener(...args);
 }

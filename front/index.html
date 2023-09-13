@@ -9,7 +9,10 @@
 <body>
     <div class="app">
         <div class="app-header">
-            <h1 class="app-title">Морской бой</h1>            
+            <h1 class="app-title">Морской бой</h1> 
+            <p class = 'app-subtitle'>
+                <span data-playerCount>0</span> игроков онлайн
+            </p>         
         </div>
         <div class="app-body">
             <div data-side="player"></div>
@@ -43,6 +46,10 @@
                     <button class="app-action" data-action="gaveup">Сдаться</button>
                     <button class="app-action" data-action="again">Играть ещё раз</button>
                 </div>
+
+                <div class="app-actions hidden" data-scene="online">
+                    <div class="battlefield-status">Ваш ход</div>
+                </div>
             </div>
             <div data-side="opponent"></div>
         </div>
@@ -53,8 +60,10 @@
 
     <script src="src/Application.js"></script>
     <script src="src/Scene.js"></script>
+
     <script src="src/scenes/PreparationScene.js"></script>
     <script src="src/scenes/ComputerScene.js"></script>    
+    <script src="src/scenes/OnlineScene.js"></script>
 
     <script src="src/Battlefield.js"></script>
     <script src="src/BattlefieldView.js"></script>
@@ -65,6 +74,7 @@
     <script src="src/Shot.js"></script>
     <script src="src/ShotView.js"></script>
 
+    <script src="socket.io/socket.io.js"></script>
     <script src="src/script.js"></script>
 </body>
 </html>

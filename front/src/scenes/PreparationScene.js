@@ -49,26 +49,25 @@ class PreparationScene extends Scene {
         const simpleButton = document.querySelector('[data-computer="simple"]');
         const middleButton = document.querySelector('[data-computer="middle"]');
         const hardButton = document.querySelector('[data-computer="hard"]');
+        const randomButton = document.querySelector('[data-type="random"]');
 
         this.removeEventListeners.push(
-            addEventListener(randomizeButton, 'click', () => 
-            this.randomize()));
+            addListeners(randomizeButton, 'click', () => this.randomize()));
 
         this.removeEventListeners.push(
-            addEventListener(manuallyButton, 'click', () =>
-            this.manually()));
+            addListeners(manuallyButton, 'click', () => this.manually()));
 
         this.removeEventListeners.push(
-            addEventListener(simpleButton, 'click', () => 
-            this.startComputer('simple')));
+            addListeners(simpleButton, 'click', () => this.startComputer('simple')));
         
         this.removeEventListeners.push(
-            addEventListener(middleButton, 'click', () => 
-            this.startComputer('middle')));
+            addListeners(middleButton, 'click', () => this.startComputer('middle')));
 
         this.removeEventListeners.push(
-            addEventListener(hardButton, 'click', () => 
-            this.startComputer('hard')));
+            addListeners(hardButton, 'click', () => this.startComputer('hard')));
+            
+        this.removeEventListeners.push(
+            addListeners(randomButton, 'click', () => this.app.start('online', 'random')));
 
     }
 
@@ -150,10 +149,12 @@ class PreparationScene extends Scene {
             document.querySelector('[data-computer="simple"]').disabled = false;
             document.querySelector('[data-computer="middle"]').disabled = false;
             document.querySelector('[data-computer="hard"]').disabled = false;
+            document.querySelector('[data-type="random"]').disabled = false;            
          } else {
             document.querySelector('[data-computer="simple"]').disabled = true;
             document.querySelector('[data-computer="middle"]').disabled = true;
             document.querySelector('[data-computer="hard"]').disabled = true;
+            document.querySelector('[data-type="random"]').disabled = true;
          }
     }
 

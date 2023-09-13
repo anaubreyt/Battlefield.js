@@ -34,13 +34,13 @@ class ComputerScene extends Scene {
         againButton.classList.add('hidden');
 
         this.removeEventListeners.push(
-            addEventListener(gaveupButton, 'click', () => {
+            addListeners(gaveupButton, 'click', () => {
                 this.app.start('preparation');
             })
         );
 
         this.removeEventListeners.push(
-            addEventListener(againButton, 'click', () => {
+            addListeners(againButton, 'click', () => {
                 this.app.start('preparation');
             })
         );
@@ -125,6 +125,5 @@ class ComputerScene extends Scene {
         }   else {
             this.status.textContent = 'Ход компьютера';
         }
-
     }
 }
