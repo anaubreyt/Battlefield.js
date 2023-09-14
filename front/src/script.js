@@ -9,6 +9,8 @@ app.start('preparation');
 
 
 document.querySelector('[data-action="randomize"]').click();
+document.querySelector('[data-type="random"]').disabled = false;
+document.querySelector('[data-type="random"]').click();
 /*document.querySelector('[data-computer="hard"]').disabled = false;
 document.querySelector('[data-computer="hard"]').click();
 

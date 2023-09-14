@@ -1,6 +1,9 @@
 // зависимости
 const session = require('express-session');
 const express = require('express');
+const PartyManager = require('./src/PartyManager');
+const pm = new PartyManager;
+
 
 // Создание приложения ExpressJS
 const app = express();
@@ -27,25 +30,21 @@ http.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
 
-// Массив ожидающих случайных игроков
-const waitingRandom = new Set;
 
 // Прослушивание socket соединений
 io.on("connection", (socket) => {
+    pm.connection(socket);
     io.emit('playerCount', io.engine.clientsCount);
 
     // Отключение коннекта
     socket.on('disconnect', () => {
+        pm.disconnect(socket);
         io.emit('playerCount', io.engine.clientsCount); 
-
-        if (waitingRandom.has(socket)) {
-            waitingRandom.delete(1);
-        }
     });
 
-    // Поиск случайного соперника
-    socket.on('findRandomOpponent', () => {
-        waitingRandom.add(socket);
+    /* Поиск случайного соперника
+    socket.on('findRandomOpponent', () => {        
         socket.emit('statusChange', 'randomFinding');
-    })
+        pm.playRandom(socket);
+    })*/
 });
