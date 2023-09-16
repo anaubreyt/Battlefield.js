@@ -31,6 +31,22 @@ class Application {
             document.querySelector('[data-playerCount]').textContent = n;
         });
 
+        socket.on('doubleConnection', () => {
+            alert('Socket соединения закрыто из-за подключения в другой вкладке');
+            document.body.classList.add('hidden');
+        });
+
+        socket.on('reconnection', (ships) => {
+            player.clear();
+
+            for (const { size, direction, x, y } of ships) {
+                const ship = new ShipView(size, direction);
+                player.addShip(ship, x, y);
+            }
+
+            this.start('online');
+        });
+
         requestAnimationFrame(() => this.tick());
     }
 

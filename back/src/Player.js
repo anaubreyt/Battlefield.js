@@ -4,12 +4,14 @@ module.exports = class Player {
     socket = null;
     party = null;
     battlefield = new Battlefield;
+    sessionId = null;
 
     get ready () {
         return this.battlefield.complete && !this.party && this.socket;
     }
 
-    constructor (socket) {
+    constructor (socket, sessionId) {
+        Object.assign(this, { socket, sessionId })
         this.socket = socket;
     }
 

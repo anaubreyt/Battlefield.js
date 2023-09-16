@@ -21,6 +21,14 @@ class OnlineScene extends Scene {
             this.statusUpdate();
         });
 
+        socket.on('message', message => {
+            const div = document.createElement('div');
+            div.classList.add('app-message');
+            div.textContent = message;
+            const chat = document.querySelector('.app-messages');
+            chat.insertBefore(div, chat.firstElementChild);
+        });
+
         socket.on('addShot', ({ x, y, variant }) => {
             const shot = new ShotView(x, y, variant);
             
@@ -48,10 +56,17 @@ class OnlineScene extends Scene {
             }
         });
 
+        socket.on('challengeOpponent', key => {
+            history.pushState(null, null, `/${key}`);
+            alert(
+                `Первый, кто пройдёт по этой ссылке, будет играть с вами:\n${location.href}`
+            );
+        });
+
         this.statusUpdate();
     }
 
-    start(variant) {
+    start(variant, key = '') {
         const { socket, player } = this.app;
 
         socket.emit(
@@ -63,8 +78,17 @@ class OnlineScene extends Scene {
                 y: ship.y         
             }))
         );
+        
+        if (variant === 'random') {
+            socket.emit('findRandomOpponent');
+        } else if (variant === 'challenge') {
+            socket.emit('challengeOpponent', key);
+        }
 
-        socket.emit('findRandomOpponent');
+        const chat = document.querySelector('.app-chat');
+        chat.classList.remove('hidden');
+
+        document.querySelector('.app-messages').textContent = '';
 
         document
         .querySelectorAll('.app-actions')
@@ -81,13 +105,29 @@ class OnlineScene extends Scene {
 
         this.removeEventListeners = [];
 
-        this.removeEventListeners.push(addListeners(againButton, 'click', () => {
-            this.app.start('preparation');
-        }))
-        this.removeEventListeners.push(addListeners(gaveupButton, 'click', () => {
-            socket.emit('gaveup');
-            this.app.start('preparation');
-        }))
+        const input = chat.querySelector('input');
+        this.removeEventListeners.push(
+            addListeners(input, 'keydown', (e) => {
+                if (e.key === 'Enter'&& input.value) {
+                    const message = input.value.slice(0, 120);
+                    input.value = '';
+                    socket.emit('message', message);
+                }
+            })
+        );
+            
+        this.removeEventListeners.push(
+            addListeners(againButton, 'click', () => {
+                this.app.start('preparation');
+            })
+        );
+
+        this.removeEventListeners.push(
+            addListeners(gaveupButton, 'click', () => {
+                socket.emit('gaveup');
+                this.app.start('preparation');
+            })
+        )
 
         this.statusUpdate();
     }   
@@ -98,6 +138,9 @@ class OnlineScene extends Scene {
         }
 
         this.removeEventListeners = [];
+
+        document.querySelector('.app-chat').classList.add('hidden');
+        document.querySelector('.app-messages').textContent = '';
     }
     
     statusUpdate() {
@@ -113,6 +156,8 @@ class OnlineScene extends Scene {
             statusDiv.textContent = 'Вы победили';
         } else if (this.status === 'luser') {
             statusDiv.textContent = 'Вы проиграли';
+        } else if (this.status === 'waiting') {
+            statusDiv.textContent = 'Ожидаем соперника';
         }
     }
 
