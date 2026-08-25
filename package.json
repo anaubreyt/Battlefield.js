@@ -1,0 +1,8 @@
+{
+  "name": "battlefield",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install --prefix back",
+    "start": "npm start --prefix back"
+  }
+}
